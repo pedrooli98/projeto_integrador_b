@@ -15,13 +15,35 @@ public final class App {
      * @param args The arguments of the program.
      */
 
-    public static Connection createConnection() throws SQLException{
-        String url = "jdbc:mysql://localhost:3306/cadastro_imunizados";
-        String user = "root";
-        String pwr = "1304";
-    }
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        List<String> pacientsList = new ArrayList<String>();
+        try {
+            try (Connection cn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/cadastro_imunizados", "root", "1304")) {
+                Statement smt = (Statement) cn.createStatement();
+                
+                String sql = "SELECT * FROM pacientes";
+                
+                ResultSet rs = smt.executeQuery(sql);
+
+            if (rs.next()) {
+                do {
+                    String resString = 
+                        rs.getString(1) + "--" + 
+                        rs.getString(2) + "--";
+
+                        pacientsList.add(resString);
+
+                        System.out.println(resString);
+                } while (rs.next());
+            } else {
+                System.out.println("Not found...");
+            }
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+
+        }
+        
     }
 }
